@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<product version="3" modelHash="-9sl1jyk8flj6pshtd767ivnqpkd828e">
+  <files names="Attribute_TextGen.java:Boolean_TextGen.java:CollectionType_TextGen.java:DAO_TextGen.java:DomainObject_TextGen.java:Double_TextGen.java:Float_TextGen.java:Integer_TextGen.java:Module_TextGen.java:Relationship_TextGen.java:String_TextGen.java:TextGenAspectDescriptor.java" />
+</product>
+

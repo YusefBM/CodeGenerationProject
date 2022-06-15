@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dependenciesRoot>
+  <uses language="l:46855889-5596-41f7-9277-402e4fbfedc8:CodeGenerationLanguaage" />
+  <uses module="f5851e3d-f54d-4936-825d-b7659f411061(CodeGenerationLanguaage.runtime)" kind="rt" />
+</dependenciesRoot>
+

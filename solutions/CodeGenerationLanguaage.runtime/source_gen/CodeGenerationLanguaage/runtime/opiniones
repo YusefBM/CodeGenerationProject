@@ -1,0 +1,224 @@
+################################ MODEL CLASSES ################################
+package opiniones.model;
+
+import java.util.List;
+import java.util.LinkedList;
+import java.util.Set;
+import java.util.HashSet;
+
+public class Opinion {
+  private String urlRecurso;
+  private int prop1;
+  private List<Integer> prop2;
+  private Set<String> canciones;
+  private List<Nombre>nombres;
+
+  public Opinion(String urlRecurso, int prop1, List<Integer> prop2, Set<String> canciones, List<Nombre>nombres) {
+    this.urlRecurso = urlRecurso;
+    this.prop1 = prop1;
+    this.prop2 = prop2;
+    this.canciones = canciones;
+    this.nombres = nombres;
+  }
+
+  public Opinion(int prop1, String urlRecurso) {
+    this.urlRecurso = urlRecurso;
+    this.prop1 = prop1;
+    this.prop2 = new LinkedList<>();
+    this.canciones = new HashSet<>();
+    this.nombres = nombres;
+  }
+
+  public String getUrlRecurso() {
+    return this.urlRecurso;
+  }
+
+  public void setUrlRecurso(String urlRecurso) {
+    this.urlRecurso = urlRecurso;
+  }
+
+  public int getProp1() {
+    return this.prop1;
+  }
+
+  public void setProp1(int prop1) {
+    this.prop1 = prop1;
+  }
+
+  public List<Integer> getProp2() {
+    return this.prop2;
+  }
+
+  public void setProp2(List<Integer> prop2) {
+    this.prop2 = prop2;
+  }
+
+  public Set<String> getCanciones() {
+    return this.canciones;
+  }
+
+  public void setCanciones(Set<String> canciones) {
+    this.canciones = canciones;
+  }
+
+  public List<Nombre> getNombres() {
+    return this.nombres;
+  }
+
+  public void setNombres(List<Nombre>nombres) {
+    this.nombres = nombres;
+  }
+
+  @Override
+  public String toString() {
+    return "Opinion { " + "urlRecurso=" + urlRecurso + ",prop1=" + prop1 + ",prop2=" + prop2 + ",canciones=" + canciones + ",nombres=" + nombres + "}";
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Opinion other = (Opinion) obj;
+
+    if (urlRecurso == null) {
+      if (other.urlRecurso != null)
+        return false;
+    } else if (!urlRecurso.equals(other.urlRecurso))
+      return false;
+
+
+package opiniones.model;
+
+
+      public class       Nombre {
+        private String nombrre;
+
+        public Nombre(String nombrre) {
+          this.nombrre = nombrre;
+        }
+
+        public String getNombrre() {
+          return this.nombrre;
+        }
+
+        public void setNombrre(String nombrre) {
+          this.nombrre = nombrre;
+        }
+
+        @Override
+        public String toString() {
+          return "Nombre { " + "nombrre=" + nombrre + "}";
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+          if (this == obj)
+            return true;
+          if (obj == null)
+            return false;
+          if (getClass() != obj.getClass())
+            return false;
+          Nombre other = (Nombre) obj;
+
+          if (nombrre == null) {
+            if (other.nombrre != null)
+              return false;
+          } else if (!nombrre.equals(other.nombrre))
+            return false;
+          return true;
+        }
+
+        @Override
+        public int hashCode() {
+          final int prime = 31;
+          int result = 1;
+          result = prime * result + ((nombrre == null) ? 0 : nombrre.hashCode());
+          return result;
+        }
+}
+
+
+################################ PERSISTENCE CLASSES ################################
+package persistence;
+
+import java.util.Set;
+import java.util.Optional;
+
+public interface DAO<T, K> {
+        Optional<T> findById(K id);
+        void save(T t);
+        void update(T t);
+        void delete(T t);
+}
+
+
+package opiniones.persistence;
+
+import opiniones.model.OpinionesDAO
+
+public interface IOpinionesDAO extends DAO<Opinion, String> {
+}
+
+public enum OpinionesDAO implements IOpinionesDAO {
+        INSTANCE;
+
+        private ServicioPersistencia servPersistencia;
+
+        private OpinionesDAO() {
+          this.servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
+        }
+
+        @Override
+        public void insert(Opinion opinion) {
+          Entidad eOpinion = opinionToEntidad(opinion);
+          eOpinion = servPersistencia.registrarEntidad(eOpinion);
+          opinion.setId(eOpinion.getId());
+        }
+
+        @Override
+        public void delete(Opinion opinion) {
+          Entidad eOpinion = servPersistencia.recuperarEntidad(opinion.getId());
+          servPersistencia.borrarEntidad(eOpinion);
+        }
+
+        @Override
+        public void update(Opinion opinion) {
+          Entidad eOpinion = servPersistencia.recuperarEntidad(opinion.getId());
+          servPersistencia.eliminarPropiedadEntidad(eOpinion, "prop1");
+          servPersistencia.anadirPropiedadEntidad(eOpinion, "prop1", String.valueOf(opinion.getProp1()));
+          servPersistencia.eliminarPropiedadEntidad(eOpinion, "urlRecurso");
+          servPersistencia.anadirPropiedadEntidad(eOpinion, "urlRecurso", opinion.getUrlRecurso());
+          servPersistencia.eliminarPropiedadEntidad(eOpinion, "prop2");
+          servPersistencia.anadirPropiedadEntidad(eOpinion, "prop2", convertPrimitiveObjectsToString(opinion.getProp2()));
+          servPersistencia.eliminarPropiedadEntidad(eOpinion, "canciones");
+          servPersistencia.anadirPropiedadEntidad(eOpinion, "canciones", convertPrimitiveObjectsToString(opinion.getCanciones()));
+          servPersistencia.eliminarPropiedadEntidad(eOpinion, "nombres");
+          servPersistencia.anadirPropiedadEntidad(eOpinion, "nombres", convertDomainObjectsToString(opinion.getNombres()));
+        }
+
+        @Override
+        public Opinion findById(String id) {
+          Entidad eOpinion = servPersistencia.recuperarEntidad(id);
+          return entidadToOpinion(eOpinion);
+        }
+
+        private String convertPrimitiveObjectsToString(Collection<Object> collection) {
+          StringBuilder string = new StringBuilder();
+          collection.forEach(o -> string.append(o + " "));
+          return string.toString().trim();
+        }
+
+        private String convertDomainObjectsToString(Collection<Object> collection) {
+          StringBuilder string = new StringBuilder();
+          collection.forEach(o -> string.append(o.getId() + " "));
+          return string.toString().trim();
+        }
+
+}
+
+
+
